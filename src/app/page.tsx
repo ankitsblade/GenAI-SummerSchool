@@ -44,32 +44,100 @@ function useParallax(speed = 0.1) {
 export default function Home() {
   const heroParallax = useParallax(0.15);
   const gridParallax = useParallax(0.05);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Close mobile menu when clicking anywhere else
+  useEffect(() => {
+    const handleClickOutside = () => {
+      if (mobileMenuOpen) setMobileMenuOpen(false);
+    };
+    
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [mobileMenuOpen]);
 
   return (
     <main className="min-h-screen font-sans bg-gray-900 text-gray-100">
- {/* Navigation */}
-<nav className="sticky top-0 z-50 backdrop-blur-md bg-gray-900/90 border-b border-gray-700">
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div className="flex justify-between h-16">
-      <div className="flex-shrink-0 flex items-center">
-        <Link href="/" className="font-bold text-xl text-teal-400 hover:text-teal-300 transition-colors duration-300">
-          Gen AI Summer School
-        </Link>
-      </div>
-      <div className="sm:ml-6 sm:flex sm:items-center sm:space-x-8">
-        <Link href="#about" className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-teal-400 transition-colors duration-300">
-          About
-        </Link>
-        <Link href="#topics" className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-teal-400 transition-colors duration-300">
-          Curriculum
-        </Link>
-        <Link href="#speakers" className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-teal-400 transition-colors duration-300">
-          Speakers
-        </Link>
-      </div>
-    </div>
-  </div>
-</nav>
+      {/* Navigation - Updated for mobile responsiveness */}
+      <nav className="sticky top-0 z-50 backdrop-blur-md bg-gray-900/90 border-b border-gray-700">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="relative flex items-center justify-between h-16">
+            {/* Logo/Title */}
+            <div className="flex-shrink-0 flex items-center">
+              <Link href="/" className="font-bold text-lg sm:text-xl text-teal-400 hover:text-teal-300 transition-colors duration-300">
+                Gen AI Summer School
+              </Link>
+            </div>
+            
+            {/* Mobile menu button */}
+            <div className="sm:hidden">
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setMobileMenuOpen(!mobileMenuOpen);
+                }} 
+                className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                aria-expanded="false"
+              >
+                <span className="sr-only"></span>
+                {/* Icon when menu is closed */}
+                {!mobileMenuOpen ? (
+                  <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                ) : (
+                  /* Icon when menu is open */
+                  <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                )}
+              </button>
+            </div>
+            
+            {/* Desktop menu */}
+            <div className="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-8">
+              <Link href="#about" className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-teal-400 transition-colors duration-300">
+                About
+              </Link>
+              <Link href="#topics" className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-teal-400 transition-colors duration-300">
+                Curriculum
+              </Link>
+              <Link href="#speakers" className="px-3 py-2 text-sm font-medium text-gray-300 hover:text-teal-400 transition-colors duration-300">
+                Speakers
+              </Link>
+            </div>
+          </div>
+        </div>
+        
+        {/* Mobile menu, show/hide based on menu state */}
+        <div className={`${mobileMenuOpen ? 'block' : 'hidden'} sm:hidden`}>
+          <div className="px-2 pt-2 pb-3 space-y-1 border-t border-gray-700">
+            <Link 
+              href="#about" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700"
+            >
+              About
+            </Link>
+            <Link 
+              href="#topics" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700"
+            >
+              Curriculum
+            </Link>
+            <Link 
+              href="#speakers" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700"
+            >
+              Speakers
+            </Link>
+          </div>
+        </div>
+      </nav>
 
       {/* Hero Section - Minimalist Design */}
 <section className="relative overflow-hidden bg-gray-800" style={{ height: '90vh' }}>
@@ -279,7 +347,7 @@ export default function Home() {
         </div>
         
         <p className="text-lg text-gray-300 mb-4">
-          Mahindra University's Summer School on Generative AI for Image Processing and Healthcare is an intensive six-week program designed to bridge the gap between academic research and practical applications in the rapidly evolving field of AI.
+          Mahindra University&apos;s Summer School on Generative AI for Image Processing and Healthcare is an intensive six-week program designed to bridge the gap between academic research and practical applications in the rapidly evolving field of AI.
         </p>
         
         <p className="text-lg text-gray-300 mb-6">
@@ -623,88 +691,71 @@ export default function Home() {
           name: "Dr. Vineeth N Balasubramanian",
           role: "Professor",
           affiliation: "IIT Hyderabad",
-          linkedin: "https://www.linkedin.com/",
-          website: "https://iith.ac.in/",
+          linkedin: "https://www.linkedin.com/in/vineethnb/",
+          website: "https://people.iith.ac.in/vineethnb/",
           image: "/Vineeth_N_Balasubramanian.jpg"
         },
         {
           name: "Dr. Subramanyam Murala",
           role: "Associate Professor",
           affiliation: "Trinity Dublin, Ireland",
-          linkedin: "https://www.linkedin.com/",
-          website: "https://www.tcd.ie/",
+          linkedin: "https://in.linkedin.com/in/subrahmanyam-murala-b5114716",
+          website: "https://www.scss.tcd.ie/~muralas/",
           image: "/murala.png"
         },
         {
           name: "Dr. Shiv Ram Dubey",
           role: "Assistant Professor",
           affiliation: "IIIT Allahabad",
-          linkedin: "https://www.linkedin.com/",
-          website: "https://www.iiita.ac.in/",
+          linkedin: "https://www.linkedin.com/in/dr-shiv-ram-dubey-4212a08a/?originalSubdomain=in",
+          website: "https://it.iiita.ac.in/?pg=facultypage&uid=srdubey",
           image: "/srdubey.jpg"
         },
         {
           name: "Dhiraj Madaan",
           role: "Scientist",
           affiliation: "IBM Research",
-          linkedin: "https://www.linkedin.com/",
-          website: "https://research.ibm.com/",
+          linkedin: "https://www.linkedin.com/in/dhiraj-madan-68208652/?originalSubdomain=in",
+          website: "https://research.ibm.com/people/dhiraj-madan",
           image: "/dhiraj madan.jpg"
         },
         {
-          name: "Arijit Roy",
-          role: "Scientist",
-          affiliation: "TCS Research and Innovation",
-          linkedin: "https://www.linkedin.com/",
-          website: "https://www.tcs.com/research-and-innovation",
-          image: "/Arijit-Roy-5.jpg"
+          name: " Om Ashish Mishra",
+          role: "Data Scientist",
+          affiliation: "Deloitte Hyderabad",
+          linkedin: "https://www.linkedin.com/in/om-ashish-mishra/?originalSubdomain=in",
+          website: "https://www.omashish.com/",
+          image: "/omashish.jpg"
         },
         {
           name: "Dr. Arnab Bhattacharya",
           role: "Professor",
           affiliation: "IIT Kanpur",
-          linkedin: "https://www.linkedin.com/",
-          website: "https://www.iitk.ac.in/",
+          linkedin: "https://www.linkedin.com/in/arnabbhattacharya3/?originalSubdomain=in",
+          website: "https://iitk.ac.in/new/arnab-bhattacharya",
           image: "/arnab6.jpg"
         },
         {
-          name: "Prof. P K",
-          role: "Professor",
-          affiliation: "IIIT Hyderabad",
-          linkedin: "https://www.linkedin.com/",
-          website: "https://www.iiit.ac.in/",
-          image: "/pk-2-768x708.jpg"
-        },
-        {
-          name: "Dr. R. B. Pachauri",
+          name: "Dr. R. B. Pachori",
           role: "Professor",
           affiliation: "IIT Indore",
-          linkedin: "https://www.linkedin.com/",
-          website: "https://www.iiti.ac.in/",
+          linkedin: "https://www.linkedin.com/in/ram-bilas-pachori-58a323aa/?originalSubdomain=in",
+          website: "https://people.iiti.ac.in/~pachori/",
           image: "/rbpachauri.jpg"
-        },
-        {
-          name: "Dr. Namrata Rastaugi",
-          role: "Chief Data Scientist",
-          affiliation: "101GenAI, Managing Director at Engima Ventures",
-          linkedin: "https://www.linkedin.com/",
-          website: "https://www.101genai.com/",
-          image: "/Namrata.jpg"
         },
         {
           name: "Dr. Debdoot Sheet",
           role: "Assistant Professor",
           affiliation: "IIT Kharagpur",
-          linkedin: "https://www.linkedin.com/",
-          website: "https://www.iitkgp.ac.in/",
+          linkedin: "https://www.linkedin.com/in/debdoot?originalSubdomain=in",
+          website: "http://www.facweb.iitkgp.ac.in/~debdoot/",
           image: "/Debdoot.jpg"
         },
         {
           name: "Prof. G. Narahari Sastry",
           role: "Professor",
           affiliation: "IIT Hyderabad",
-          linkedin: "https://www.linkedin.com/",
-          website: "https://iith.ac.in/",
+          website: "https://iith.ac.in/bt/gnsastry/",
           image: "/G._Narahari_Sastry.jpg"
         }
       ].map((speaker, index) => {
@@ -776,33 +827,37 @@ export default function Home() {
               </div>
               
               {/* Links row */}
-              <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-700">
-                <span className="text-xs text-gray-500"></span>
-                <div className="flex space-x-2">
-                  <a 
-                    href={speaker.linkedin} 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    aria-label={`LinkedIn profile of ${speaker.name}`}
-                    className="p-2 rounded-md bg-gray-700 hover:bg-gray-600 transition-colors duration-300"
-                  >
-                    <svg className="w-4 h-4 text-teal-400" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-                    </svg>
-                  </a>
-                  <a 
-                    href={speaker.website} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    aria-label={`Website of ${speaker.name}`}
-                    className="p-2 rounded-md bg-gray-700 hover:bg-gray-600 transition-colors duration-300"
-                  >
-                    <svg className="w-4 h-4 text-teal-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M4.083 9h1.946c.089-1.546.383-2.97.837-4.118A6.004 6.004 0 004.083 9zM10 2a8 8 0 100 16 8 8 0 000-16zm0 2c-.076 0-.232.032-.465.262-.238.234-.497.623-.737 1.182-.389.907-.673 2.142-.766 3.556h3.936c-.093-1.414-.377-2.649-.766-3.556-.24-.56-.5-.948-.737-1.182C10.232 4.032 10.076 4 10 4zm3.971 5c-.089-1.546-.383-2.97-.837-4.118A6.004 6.004 0 0115.917 9h-1.946zm-2.003 2H8.032c.093 1.414.377 2.649.766 3.556.24.56.5.948.737 1.182.233.23.389.262.465.262.076 0 .232-.032.465-.262.238-.234.498-.623.737-1.182.389-.907.673-2.142.766-3.556zm1.166 4.118c.454-1.147.748-2.572.837-4.118h1.946a6.004 6.004 0 01-2.783 4.118zm-6.268 0C6.412 13.97 6.118 12.546 6.03 11H4.083a6.004 6.004 0 002.783 4.118z" clipRule="evenodd" />
-                    </svg>
-                  </a>
-                </div>
-              </div>
+             
+{/* Links row */}
+<div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-700">
+  <span className="text-xs text-gray-500"></span>
+  <div className="flex space-x-2">
+    {speaker.linkedin && (
+      <a 
+        href={speaker.linkedin} 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        aria-label={`LinkedIn profile of ${speaker.name}`}
+        className="p-2 rounded-md bg-gray-700 hover:bg-gray-600 transition-colors duration-300"
+      >
+        <svg className="w-4 h-4 text-teal-400" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+        </svg>
+      </a>
+    )}
+    <a 
+      href={speaker.website} 
+      target="_blank" 
+      rel="noopener noreferrer"
+      aria-label={`Website of ${speaker.name}`}
+      className="p-2 rounded-md bg-gray-700 hover:bg-gray-600 transition-colors duration-300"
+    >
+      <svg className="w-4 h-4 text-teal-400" fill="currentColor" viewBox="0 0 20 20">
+        <path fillRule="evenodd" d="M4.083 9h1.946c.089-1.546.383-2.97.837-4.118A6.004 6.004 0 004.083 9zM10 2a8 8 0 100 16 8 8 0 000-16zm0 2c-.076 0-.232.032-.465.262-.238.234-.497.623-.737 1.182-.389.907-.673 2.142-.766 3.556h3.936c-.093-1.414-.377-2.649-.766-3.556-.24-.56-.5-.948-.737-1.182C10.232 4.032 10.076 4 10 4zm3.971 5c-.089-1.546-.383-2.97-.837-4.118A6.004 6.004 0 0115.917 9h-1.946zm-2.003 2H8.032c.093 1.414.377 2.649.766 3.556.24.56.5.948.737 1.182.233.23.389.262.465.262.076 0 .232-.032.465-.262.238-.234.498-.623.737-1.182.389-.907.673-2.142.766-3.556zm1.166 4.118c.454-1.147.748-2.572.837-4.118h1.946a6.004 6.004 0 01-2.783 4.118zm-6.268 0C6.412 13.97 6.118 12.546 6.03 11H4.083a6.004 6.004 0 002.783 4.118z" clipRule="evenodd" />
+      </svg>
+    </a>
+  </div>
+</div>
             </div>
           </motion.div>
         );
